@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/data.dart';
 import 'package:todo_app/utils/extension.dart';
+import 'package:todo_app/widgets/widgets.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({super.key, required this.task, this.onCompleted});
@@ -19,16 +20,9 @@ class TaskTile extends StatelessWidget {
     final fontWeight = task.isCompleted ? FontWeight.w400 : FontWeight.w600;
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.all(9.0),
-          decoration: BoxDecoration(
-            color: task.category.color.withOpacity(backgroundOpacity),
-            shape: BoxShape.circle,
-            border: Border.all(
-              width: 2,
-              color: task.category.color.withOpacity(iconOpacity),
-            ),
-          ),
+        CircleContainer(
+          color: task.category.color.withOpacity(backgroundOpacity),
+
           child: Center(
             child: Icon(
               color: task.category.color.withOpacity(iconOpacity),
@@ -52,7 +46,6 @@ class TaskTile extends StatelessWidget {
               ),
               Text(
                 task.time,
-
                 style: style.titleMedium!.copyWith(decoration: textDecoration),
               ),
             ],

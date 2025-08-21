@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/data.dart';
-import 'package:todo_app/utils/extension.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/widgets.dart';
 
@@ -50,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                       tasks: [
                         Task(
                           title: 'Title 1',
-                          note: 'note',
+                          note: '',
                           time: '10:12',
                           date: 'Aug, 7',
                           isCompleted: false,
@@ -73,25 +72,28 @@ class HomeScreen extends StatelessWidget {
                     Text('Completed', style: context.textTheme.headlineMedium),
                     SizedBox(height: 20),
 
-                    DisplayListOfTask(tasks: [
-                      Task(
-                        title: 'Title 1',
-                        note: 'note',
-                        time: '10:12',
-                        date: 'Aug, 7',
-                        isCompleted: true,
-                        category: TaskCategories.personal,
-                      ),
+                    DisplayListOfTask(
+                      tasks: [
+                        Task(
+                          title: 'Title 1',
+                          note: 'note',
+                          time: '10:12',
+                          date: 'Aug, 7',
+                          isCompleted: true,
+                          category: TaskCategories.personal,
+                        ),
 
-                      Task(
-                        title: 'Title 2',
-                        note: 'note',
-                        time: '10:12',
-                        date: 'Aug, 7',
-                        isCompleted: true,
-                        category: TaskCategories.work,
-                      ),
-                    ], isCompletedTasks: true),
+                        Task(
+                          title: 'Title 2',
+                          note: 'note',
+                          time: '10:12',
+                          date: 'Aug, 7',
+                          isCompleted: true,
+                          category: TaskCategories.work,
+                        ),
+                      ],
+                      isCompletedTasks: true,
+                    ),
 
                     SizedBox(height: 20),
                     ElevatedButton(
