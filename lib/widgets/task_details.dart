@@ -47,7 +47,7 @@ class TaskDetails extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Task to be completed in ${task.date}'),
+                  Text('Task completed'),
                   const SizedBox(width: 8),
                   Icon(Icons.check_box, color: task.category.color),
                 ],
