@@ -60,21 +60,29 @@ ${DBKeys.isCompletedColumn}TEXT,
       return await txn.update(
         DBKeys.dbTable,
         task.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
+        whereArgs: [task.id],
       );
     });
   }
 
   //delete all the tasks
 
-  Future<int> deleteAllTasks(Task task) async {
+  Future<int> deleteTasks(Task task) async {
     final db = await database;
     return db.transaction((txn) async {
-      return await txn.delete(
-        DBKeys.dbTable,
-        where: 'id = ?',
-        whereArgs: [task.id],
-      );
+      return await txn.delete(DBKeys.dbTable, where: 'id = ?');
     });
+  }
+
+  //new list of everything
+
+  Future<List<Task>> getAllTasks() async {
+    final db = await database;
+    final List<Map<String, dynamic>> data = await db.query(
+      DBKeys.dbTable,
+      orderBy: "id desc",
+    );
+
+    return List.generate(data.length, (index) => Task.fromJson(data[index]));
   }
 }
