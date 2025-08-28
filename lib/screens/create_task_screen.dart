@@ -22,6 +22,8 @@ class CreateTaskScreen extends StatelessWidget {
           children: [
             CommonTextfield(title: 'Task Title', hintText: 'Task Title'),
             SizedBox(height: 16),
+            SizedBox(height: 16),
+            SelectCategory(),
             SelectDateTime(),
             SizedBox(height: 16),
 

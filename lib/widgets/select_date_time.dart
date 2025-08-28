@@ -31,7 +31,7 @@ class SelectDateTime extends ConsumerWidget {
             title: 'Time',
             hintText: time.format(context),
             suffixIcon: IconButton(
-              onPressed: () => _selectTime(context),
+              onPressed: () => _selectTime(context, ref),
               icon: FaIcon(FontAwesomeIcons.clock),
             ),
           ),
@@ -40,13 +40,15 @@ class SelectDateTime extends ConsumerWidget {
     );
   }
 
-  void _selectTime(BuildContext context) async {
+  void _selectTime(BuildContext context, WidgetRef ref) async {
+    final time = ref.watch(timeProvider);
+
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
     if (pickedTime != null) {
-      print(pickedTime);
+      ref.read(timeProvider.notifier).update((state) => pickedTime);
     }
   }
 
@@ -59,7 +61,7 @@ class SelectDateTime extends ConsumerWidget {
       lastDate: DateTime(2090),
     );
     if (pickedDate != null) {
-      print(pickedDate);
+      ref.read(dateProvider.notifier).update((state) => pickedDate);
     }
   }
 }
