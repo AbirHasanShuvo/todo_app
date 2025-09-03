@@ -5,13 +5,17 @@ import 'package:todo_app/data/repositories/repositories.dart';
 import 'package:todo_app/providers/task/task_state.dart';
 
 class TaskNotifier extends StateNotifier<TaskState> {
-  TaskNotifier(this._repository) : super(TaskState.initial());
+  TaskNotifier(this._repository) : super(TaskState.initial()) {
+    //load all task as soon as the appp
+    getTasks();
+  }
 
   final TaskRepository _repository;
 
   Future<void> createTask(Task task) async {
     try {
       await _repository.createTask(task);
+      getTasks();
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -32,12 +36,13 @@ class TaskNotifier extends StateNotifier<TaskState> {
       final isCompleted = !task.isCompleted;
       final updatedTask = task.copyWith(isCompleted: isCompleted);
       await _repository.updateTask(task);
+      getTasks();
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  Future<void> getTasks() async {
+  void getTasks() async {
     try {
       final tasks = await _repository.getAllTasks();
       state = state.copyWith(tasks: tasks);

@@ -37,7 +37,7 @@ class Task extends Equatable {
       TaskKeys.time: time,
       TaskKeys.date: date,
       TaskKeys.categories: category.name,
-      TaskKeys.isCompleted: isCompleted,
+      TaskKeys.isCompleted: isCompleted ? 1 : 0,
     };
   }
 
@@ -51,7 +51,7 @@ class Task extends Equatable {
       category: TaskCategories.stringToCategory(
         map[TaskKeys.categories] as String,
       ),
-      isCompleted: map[TaskKeys.isCompleted] as bool,
+      isCompleted: map[TaskKeys.isCompleted] == 1 ? true : false,
     );
   }
 

@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:todo_app/config/routes/routes.dart';
+import 'package:todo_app/data/models/task.dart';
+import 'package:todo_app/providers/providers.dart';
+import 'package:todo_app/utils/app_alerts.dart';
 import 'package:todo_app/utils/extension.dart';
+import 'package:todo_app/utils/helpers.dart';
 import 'package:todo_app/widgets/widgets.dart';
 
-class CreateTaskScreen extends StatelessWidget {
+class CreateTaskScreen extends ConsumerStatefulWidget {
   static CreateTaskScreen builder(BuildContext context, GoRouterState state) =>
       const CreateTaskScreen();
 
   const CreateTaskScreen({super.key});
+
+  @override
+  ConsumerState<CreateTaskScreen> createState() => _CreateTaskScreenState();
+}
+
+class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _noteController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +41,23 @@ class CreateTaskScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CommonTextfield(title: 'Task Title', hintText: 'Task Title'),
+            CommonTextfield(
+              controller: _titleController,
+              title: 'Task Title',
+              hintText: 'Task Title',
+            ),
             SizedBox(height: 16),
             SizedBox(height: 16),
             SelectCategory(),
             SelectDateTime(),
             SizedBox(height: 16),
 
-            CommonTextfield(maxLines: 6, title: 'Note', hintText: 'Task Note'),
+            CommonTextfield(
+              controller: _noteController,
+              maxLines: 6,
+              title: 'Note',
+              hintText: 'Task Note',
+            ),
             SizedBox(height: 40),
 
             ElevatedButton(
@@ -34,7 +65,7 @@ class CreateTaskScreen extends StatelessWidget {
                 backgroundColor:
                     context.colorScheme.primary, // Change to your desired color
               ),
-              onPressed: () {},
+              onPressed: _createTask,
               child: DisplayWhiteText(text: 'Save'),
             ),
           ],
@@ -42,4 +73,33 @@ class CreateTaskScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _createTask() async {
+    final title = _titleController.text.trim();
+    final note = _noteController.text.trim();
+    final date = ref.watch(dateProvider);
+    final time = ref.watch(timeProvider);
+    final category = ref.watch(categoryProvider);
+
+    if (title.isNotEmpty) {
+      final task = Task(
+        title: title,
+        note: note,
+        time: Helpers.timeToString(time),
+        date: DateFormat.yMMMd().format(date),
+        category: category,
+        isCompleted: false,
+      );
+
+      await ref.read(taskProvider.notifier).createTask(task).then((value) {
+        AppAlerts.displaySnackbar(context, "Task created successfully");
+        context.go(RouteLocation.home);
+      });
+    }else{
+      AppAlerts.displaySnackbar(context, 'Title can not be empty ');
+
+    }
+  }
 }
+
+//sqflite does not accept bool,

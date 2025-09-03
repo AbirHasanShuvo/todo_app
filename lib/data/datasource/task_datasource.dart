@@ -17,28 +17,31 @@ class TaskDatasource {
     return _database!;
   }
 
+  // Future<Database> _initDB() async {
+  //   final dbPath = await getDatabasesPath();
+  //   final path = join('dbPath', DBKeys.dbName);
+  //   return openDatabase(path, version: 1, onCreate: _onCreate);
+  // }
+
+  //fixed initDB
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join('dbPath', DBKeys.dbName);
+    final path = join(dbPath, DBKeys.dbName); // fixed here
     return openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-${DBKeys.dbTable}(
-${DBKeys.idColumn}INTEGER PRIMARY KEY AUTOINCREMENT,
-${DBKeys.titleColumn}TEXT,
-${DBKeys.noteColumn}TEXT,
-${DBKeys.dateColumn}TEXT,
-${DBKeys.timeColumn}TEXT,
-${DBKeys.categoriesColumn}TEXT,
-${DBKeys.isCompletedColumn}TEXT,
-
-
-
-
-)
-''');
+    CREATE TABLE ${DBKeys.dbTable} (
+      ${DBKeys.idColumn} INTEGER PRIMARY KEY AUTOINCREMENT,
+      ${DBKeys.titleColumn} TEXT,
+      ${DBKeys.noteColumn} TEXT,
+      ${DBKeys.dateColumn} TEXT,
+      ${DBKeys.timeColumn} TEXT,
+      ${DBKeys.categoriesColumn} TEXT,
+      ${DBKeys.isCompletedColumn} TEXT
+    )
+  ''');
   }
 
   Future<int> addTask(Task task) async {
